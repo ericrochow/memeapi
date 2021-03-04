@@ -13,28 +13,52 @@ gif_baseurl = os.getenv("GIF_BASEURL")
 
 
 @app.get("/img")
-async def return_img_link(query: str) -> str:
+async def return_img_link(query: str) -> dict:
     """
-    This method uses fuzzy matching on an argument and returns a link
-    to the most relevant image.
+    Uses fuzzy matching on an argument to returns a link to the most relevant image.
+
+    Args:
+      query: A string containing the search query argument
+    Returns:
+      A dict containing the results of the search.
     """
     best_match = extractOne(query.replace(" ", "_"), os.listdir(img_dir))
     if best_match[1] > 50:
-        resp = f"{img_baseurl}/{best_match[0]}"
+        resp = {
+            "success": True,
+            "query": query,
+            "link": f"{img_baseurl}/{best_match[0]}",
+        }
     else:
-        resp = "Sorry, I wasn't able to find an appropriate image."
+        resp = {
+            "success": False,
+            "query": query,
+            "reason": "Was not able to find an appropriate image",
+        }
     return resp
 
 
 @app.get("/gif")
-async def return_gif_link(query: str) -> str:
+async def return_gif_link(query: str) -> dict:
     """
-    This method uses fuzzy matching on an argument and returns a link
-    to the most relevant gif.
+    Uses fuzzy matching on an argument and returns a link to the most relevant gif.
+
+    Args:
+      query: A string containing the search query argument
+    Returns:
+      A dict containing the results of the search.
     """
     best_match = extractOne(query.replace(" ", "_"), os.listdir(gif_dir))
     if best_match[1] > 50:
-        resp = f"{gif_baseurl}/{best_match[0]}"
+        resp = {
+            "success": True,
+            "query": query,
+            "link": f"{gif_baseurl}/{best_match[0]}",
+        }
     else:
-        resp = "Sorry, I wasn't able to find an appropriate gif."
+        resp = {
+            "success": False,
+            "query": query,
+            "reason": "Was not able to find an appropriate image",
+        }
     return resp
