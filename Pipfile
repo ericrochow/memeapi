@@ -1,0 +1,22 @@
+[[source]]
+url = "https://pypi.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[packages]
+fastapi = "*"
+uvicorn = {extras = ["standard"], version = "*"}
+fuzzywuzzy = {extras = ["speedup"], version = "*"}
+python-dotenv = "*"
+
+[dev-packages]
+flake8 = "*"
+bandit = "*"
+flake8-bandit = "*"
+black = "*"
+
+[requires]
+python_version = "3.6"
+
+[pipenv]
+allow_prereleases = true
