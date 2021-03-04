@@ -1,8 +1,10 @@
 import os
+from typing import Optional
 
 from dotenv import load_dotenv
 from fastapi import FastAPI
 from fuzzywuzzy.process import extractOne
+from pydantic import BaseModel
 
 load_dotenv()
 app = FastAPI()
@@ -12,7 +14,19 @@ gif_dir = os.getenv("GIF_DIR")
 gif_baseurl = os.getenv("GIF_BASEURL")
 
 
-@app.get("/img")
+class ImgSuccess(BaseModel):
+    success: bool
+    query: str
+    link: Optional[str] = None
+
+
+class GifSuccess(BaseModel):
+    success: bool
+    query: str
+    link: Optional[str] = None
+
+
+@app.get("/img", response_model=ImgSuccess)
 async def return_img_link(query: str) -> dict:
     """
     Uses fuzzy matching on an argument to returns a link to the most relevant image.
@@ -38,7 +52,7 @@ async def return_img_link(query: str) -> dict:
     return resp
 
 
-@app.get("/gif")
+@app.get("/gif", response_model=GifSuccess)
 async def return_gif_link(query: str) -> dict:
     """
     Uses fuzzy matching on an argument and returns a link to the most relevant gif.
